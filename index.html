@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmAssist - Connecting Farmers with Essential Services</title>
+     <style>
+    /* Base styles (keeping your existing ones) */
+    :root {
+            --primary: #2e7d32;
+            --primary-light: #60ad5e;
+            --primary-dark: #005005;
+            --secondary: #689f38;
+            --accent: #ff8f00;
+            --accent-light: #ffc046;
+            --accent-dark: #c56000;
+            --light: #f1f8e9;
+            --dark: #1b5e20;
+            --text: #212121;
+            --gray: #757575;
+            --light-gray: #f5f5f5;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --error: #f44336;
+            --info: #2196f3;
+            --transition: all 0.3s ease;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+            color: var(--text);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+      header {
+            background-color: var(--primary);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    /* Hero section with slideshow background */
+    .hero {
+        position: relative;
+        color: white;
+        padding: 6rem 0;
+        text-align: center;
+        overflow: hidden;
+        height: 600px; /* Fixed height for the hero section */
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 10;
+    }
+    
+    .hero-bg-slideshow {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+    
+    .slide-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        opacity: 0;
+        transition: opacity 1s ease;
+        display: none;
+    }
+    
+    .slide-bg:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); /* Overlay to ensure text is readable */
+    }
+    
+    .slide-bg.active {
+        opacity: 1;
+        display: block;
+        animation: fadeEffect 1s;
+    }
+    
+    @keyframes fadeEffect {
+        from {opacity: 0.4}
+        to {opacity: 1}
+    }
+    
+    .slideshow-controls {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        z-index: 10;
+    }
+    
+    .control-btn {
+        background-color: rgba(0,0,0,0.5);
+        color: white;
+        border: none;
+        padding: 8px;
+        border-radius: 50%;
+        cursor: pointer;
+        margin-left: 5px;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .control-btn:hover {
+        background-color: rgba(0,0,0,0.8);
+    }
+    
+    .dots-container {
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        z-index: 10;
+    }
+    
+    .dot {
+        cursor: pointer;
+        height: 12px;
+        width: 12px;
+        margin: 0 5px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+        transition: background-color 0.6s ease;
+    }
+    
+    .dot.active, .dot:hover {
+        background-color: var(--primary);
+    }
+
+    /* Rest of your styles (keeping your existing ones) */
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: white;
+        text-decoration: none;
+    }
+
+    .logo h1 {
+        font-size: 1.8rem;
+    }
+
+    .logo-icon {
+        font-size: 2rem;
+    }
+
+    nav ul {
+        display: flex;
+        list-style: none;
+        gap: 1.5rem;
+    }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s;
+        padding: 0.5rem 0;
+    }
+
+    nav a:hover {
+        color: var(--accent);
+    }
+
+    .auth-buttons {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .btn {
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        border: none;
+    }
+
+    .btn-primary {
+        background-color: var(--accent);
+        color: white;
+    }
+
+    .btn-outline {
+        background-color: transparent;
+        border: 1px solid white;
+        color: white;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .hero h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .hero p {
+        font-size: 1.2rem;
+        max-width: 800px;
+        margin: 0 auto 2rem;
+    }
+
+    .search-box {
+        background: white;
+        border-radius: 8px;
+        padding: 1rem;
+        display: flex;
+        max-width: 700px;
+        margin: 0 auto;
+        gap: 0.5rem;
+    }
+
+    .search-box input {
+        flex: 1;
+        padding: 0.8rem;
+        border: 1px solid var(--light-gray);
+        border-radius: 4px;
+        font-size: 1rem;
+    }
+
+    /* Services Section */
+    .services {
+        padding: 4rem 0;
+        background-color: var(--light);
+    }
+
+    .section-title {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+
+    .section-title h2 {
+        font-size: 2rem;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .section-title p {
+        color: var(--gray);
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+        gap: 2rem;
+    }
+
+    .service-card {
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transition: transform 0.3s;
+    }
+
+    .service-card:hover {
+        transform: translateY(-10px);
+    }
+
+    .service-card img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+    }
+
+    .service-content {
+        padding: 1.5rem;
+    }
+
+    .service-content h3 {
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .service-content p {
+        color: var(--gray);
+        margin-bottom: 1rem;
+    }
+
+    /* Features Section */
+    .features {
+        padding: 4rem 0;
+        background-color: white;
+    }
+
+    .features-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 2rem;
+    }
+
+    .features-content {
+        flex: 1;
+        min-width: 300px;
+    }
+
+    .features-content h2 {
+        font-size: 2rem;
+        color: var(--dark);
+        margin-bottom: 1rem;
+    }
+
+    .features-content p {
+        color: var(--gray);
+        margin-bottom: 2rem;
+    }
+
+    .feature-list {
+        list-style: none;
+    }
+
+    .feature-item {
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .feature-icon {
+        background-color: var(--light);
+        color: var(--primary);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-size: 1.2rem;
+    }
+
+    .features-image {
+        flex: 1;
+        min-width: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .features-image img {
+        width: 100%;
+        max-width: 500px;
+        border-radius: 8px;
+    }
+
+    /* How It Works Section */
+    .how-it-works {
+        padding: 4rem 0;
+        background-color: var(--light);
+    }
+
+    .steps {
+        display: flex;
+        justify-content: space-between;
+        gap: 2rem;
+        margin-top: 3rem;
+        flex-wrap: wrap;
+    }
+
+    .step {
+        flex: 1;
+        min-width: 250px;
+        text-align: center;
+        padding: 2rem;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        position: relative;
+    }
+
+    .step:not(:last-child)::after {
+        content: "→";
+        position: absolute;
+        right: -1.5rem;
+        top: 50%;
+        font-size: 2rem;
+        color: var(--gray);
+    }
+
+    .step-number {
+        background-color: var(--primary);
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        margin: 0 auto 1rem;
+        font-weight: bold;
+    }
+
+    .step h3 {
+        margin-bottom: 1rem;
+        color: var(--dark);
+    }
+
+    /* Testimonials Section */
+    .testimonials {
+        padding: 4rem 0;
+        background-color: white;
+    }
+
+    .testimonials-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+
+    .testimonial {
+        background-color: var(--light);
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .testimonial-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .testimonial-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: var(--secondary);
+        color: white;
+        display: grid;
+        place-items: center;
+        font-weight: bold;
+    }
+
+    .testimonial-info h4 {
+        color: var(--dark);
+        margin-bottom: 0.2rem;
+    }
+
+    .testimonial-info p {
+        color: var(--gray);
+        font-size: 0.9rem;
+    }
+
+    .testimonial-content {
+        color: var(--text);
+        font-style: italic;
+    }
+
+    /* Call to Action Section */
+    .cta {
+        padding: 4rem 0;
+        background-color: var(--primary);
+        color: white;
+        text-align: center;
+    }
+
+    .cta h2 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .cta p {
+        max-width: 800px;
+        margin: 0 auto 2rem;
+        color: rgba(255,255,255,0.9);
+    }
+
+    .cta-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-cta {
+        padding: 0.8rem 2rem;
+        font-size: 1.1rem;
+    }
+
+    /* Footer */
+    footer {
+        background-color: var(--dark);
+        color: white;
+        padding: 4rem 0 2rem;
+    }
+
+    .footer-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    .footer-column h3 {
+        color: white;
+        margin-bottom: 1.5rem;
+        font-size: 1.2rem;
+    }
+
+    .footer-column ul {
+        list-style: none;
+    }
+
+    .footer-column li {
+        margin-bottom: 0.8rem;
+    }
+
+    .footer-column a {
+        color: rgba(255,255,255,0.7);
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    .footer-column a:hover {
+        color: white;
+    }
+
+    .social-links {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .social-link {
+        background-color: rgba(255,255,255,0.1);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        color: white;
+        transition: background-color 0.3s;
+    }
+
+    .social-link:hover {
+        background-color: var(--accent);
+    }
+
+    .footer-bottom {
+        text-align: center;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255,255,255,0.1);
+        color: rgba(255,255,255,0.5);
+        font-size: 0.9rem;
+    }
+
+    /* Modal Styles for Login/Register */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s;
+    }
+    .search-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .search-form {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .search-btn {
+            padding: 10px 20px;
+            background-color: #4c7d3f; /* Agricultural green */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        .search-btn:hover {
+            background-color: #3a5f30;
+        }
+        
+        .search-filters {
+            margin-top: 15px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .search-results {
+            margin-top: 25px;
+        }
+        
+        .result-item {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-title {
+            color: #2b5520;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        
+        .result-description {
+            color: #495057;
+            margin-bottom: 5px;
+        }
+        
+        .result-meta {
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .highlight {
+            background-color: #ffff99;
+            padding: 0 2px;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 576px) {
+            .search-form {
+                flex-direction: column;
+            }
+            
+            .search-filters {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal {
+        background-color: white;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 500px;
+        padding: 2rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        transform: translateY(-20px);
+        transition: all 0.3s;
+        position: relative;
+    }
+
+    .modal-overlay.active .modal {
+        transform: translateY(0);
+    }
+
+    .close-modal {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: transparent;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--gray);
+    }
+
+    .modal-tabs {
+        display: flex;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid var(--light-gray);
+    }
+
+    .modal-tab {
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        font-weight: 500;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s;
+    }
+
+    .modal-tab.active {
+        color: var(--primary);
+        border-bottom-color: var(--primary);
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--text);
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid var(--light-gray);
+        border-radius: 4px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary);
+    }
+
+    .form-check {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .hero-controls {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 5;
+        pointer-events: none;
+    }
+    
+    .hero-controls button {
+        pointer-events: auto;
+    }
+    .prev-btn,
+    .next-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        background-color: rgba(0,0,0,0.5);
+        color: white;
+        border: none;
+        padding: 1rem;
+        cursor: pointer;
+        font-size: 1.5rem;
+        border-radius: 50%;
+        transition: background-color 0.3s;
+    }
+    
+    .prev-btn {
+        left: 20px;
+    }
+    
+    .next-btn {
+        right: 20px;
+    }
+    
+    .prev-btn:hover,
+    .next-btn:hover {
+        background-color: rgba(0,0,0,0.8);
+    }
+     </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <span class="logo-icon">🌱</span>
+                <h1>FarmAssist</h1>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-outline">Login/Register</a>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Hero Section with Slideshow Background -->
+    <section class="hero">
+        <!-- Slideshow Background -->
+        <div class="hero-bg-slideshow">
+            <div class="slide-bg active" style="background-image:url('Gemini_Generated_Image_z7lqn4z7lqn4z7lq.jpeg')"></div>
+            <div class="slide-bg" style="background-image: url('Gemini_Generated_Image_8sexvy8sexvy8sex.jpeg')"></div>
+            <div class="slide-bg" style="background-image: url('Gemini_Generated_Image_l01rzjl01rzjl01r.jpeg')"></div>
+            <div class="slide-bg" style="background-image: url('Gemini_Generated_Image_67gxg467gxg467gx.jpeg')"></div>
+            <div class="slide-bg" style="background-image: url('istockphoto.jpg')"></div>
+            
+            <!-- Controls -->
+            <div class="slideshow-controls">
+                <button class="control-btn" id="pausePlayBtn" onclick="toggleSlideshow()">⏸️</button>
+            </div>
+            
+            <!-- Dots/circles -->
+            <div class="dots-container">
+                <span class="dot active" onclick="currentSlide(0)"></span>
+                <span class="dot" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+                <span class="dot" onclick="currentSlide(4)"></span>
+            </div>
+        </div>
+        
+        <!-- Hero Content -->
+        <div class="container hero-content">
+            <h2>Connecting Farmers with Essential Services</h2>
+            <p>Access to expert advice, agricultural services, and resources to increase productivity and sustainability</p>
+            <!-- Remove this duplicate search box -->
+            <!-- <div class="search-box">
+                <input type="text" placeholder="What agricultural service are you looking for?">
+                <button class="btn btn-primary">Search</button>
+            </div> -->
+            
+            <!-- Keep this more complete search component -->
+            <div class="search-container">
+        <form id="search-form" class="search-form" action="search-results.html" method="GET">
+            <input type="text" id="search-input" class="search-input" name="query" placeholder="Search for crops, articles, guides..." aria-label="Search" required>
+            <button type="submit" class="search-btn">Search</button>
+        </form>
+        
+        <div class="search-filters">
+            <div class="filter-group">
+                <input type="checkbox" id="filter-articles" name="content-type" value="articles" checked>
+                <label for="filter-articles">Articles</label>
+            </div>
+            <div class="filter-group">
+                <input type="checkbox" id="filter-guides" name="content-type" value="guides" checked>
+                <label for="filter-guides">Guides</label>
+            </div>
+            <div class="filter-group">
+                <input type="checkbox" id="filter-products" name="content-type" value="products" checked>
+                <label for="filter-products">Products</label>
+            </div>
+            <div class="filter-group">
+                <select id="filter-category" name="category">
+                    <option value="">All Categories</option>
+                    <option value="crops">Crops</option>
+                    <option value="livestock">Livestock</option>
+                    <option value="equipment">Equipment</option>
+                    <option value="techniques">Farming Techniques</option>
+                </select>
+            </div>
+        </div>
+        
+        <div id="search-results" class="search-results">
+            <!-- Results will be populated here dynamically -->
+        </div>
+    </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Services</h2>
+                <p>FarmAssist provides comprehensive services to improve farming operations across Ghana</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <img src="spk.jpg" alt="Irrigation Management">
+                    <div class="service-content">
+                        <h3>Irrigation Management</h3>
+                        <p>Access expert advice and automated irrigation scheduling tools for better water management.</p>
+                        <a href="irrigation management.html" class="btn btn-primary">Learn More</a>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <img src="bcg.jpg" alt="Farm Machinery">
+                    <div class="service-content">
+                        <h3>Machinery & Accessories</h3>
+                        <p>Find suppliers, rent, buy, or sell farm equipment through our marketplace.</p>
+                        <a href="#" class="btn btn-primary">Learn More</a>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <img src="loren-king-KUkTDE3JGiY-unsplash.jpg" alt="Land Preparation">
+                    <div class="service-content">
+                        <h3>Land Preparation</h3>
+                        <p>Book professional ploughing, harrowing, and levelling services online.</p>
+                        <a href="#" class="btn btn-primary">Learn More</a>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <img src="background.jpg" alt="Livestock Care">
+                    <div class="service-content">
+                        <h3>Livestock & Poultry Care</h3>
+                        <p>Get veterinary advice and connect with quality feed suppliers.</p>
+                        <a href="#" class="btn btn-primary">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container features-container">
+            <div class="features-content">
+                <h2>Innovative Features for Modern Farming</h2>
+                <p>FarmAssist leverages technology to transform agricultural practices and improve farmers' livelihoods.</p>
+                <ul class="feature-list">
+                    <li class="feature-item">
+                        <div class="feature-icon">📱</div>
+                        <div>
+                            <h3>Mobile Accessibility</h3>
+                            <p>Access services on any device, even in remote areas.</p>
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <div class="feature-icon">🤖</div>
+                        <div>
+                            <h3>AI-Powered Recommendations</h3>
+                            <p>Get personalized service suggestions based on your farm's needs.</p>
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <div class="feature-icon">💬</div>
+                        <div>
+                            <h3>Community Forum</h3>
+                            <p>Connect with other farmers and experts to share knowledge.</p>
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <div class="feature-icon">🔔</div>
+                        <div>
+                            <h3>Real-Time Updates</h3>
+                            <p>Receive notifications on weather conditions and market trends.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="features-image">
+                <img src="/api/placeholder/500/400" alt="FarmAssist Features">
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <div class="section-title">
+                <h2>How FarmAssist Works</h2>
+                <p>Simple steps to connect you with the agricultural services you need</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Register</h3>
+                    <p>Create your account and complete your farm profile with relevant details.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Browse Services</h3>
+                    <p>Explore available services and providers in your region.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Book & Connect</h3>
+                    <p>Schedule services or connect with suppliers through our platform.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Improve & Grow</h3>
+                    <p>Implement solutions to boost productivity and sustainability.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>Success Stories</h2>
+                <p>Hear from farmers who have transformed their operations with FarmAssist</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">KA</div>
+                        <div class="testimonial-info">
+                            <h4>Kwame Agyeman</h4>
+                            <p>Maize Farmer, Ashanti Region</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-content">
+                        <p>"FarmAssist helped me find affordable irrigation services that increased my crop yield by 35%. The platform is easy to use even for someone like me who isn't tech-savvy."</p>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">AA</div>
+                        <div class="testimonial-info">
+                            <h4>Abena Addo</h4>
+                            <p>Poultry Farmer, Greater Accra</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-content">
+                        <p>"I found reliable veterinary services and quality feed suppliers through FarmAssist. My poultry mortality rate has decreased significantly since I started using the platform."</p>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">KO</div>
+                        <div class="testimonial-info">
+                            <h4>Kofi Owusu</h4>
+                            <p>Cocoa Farmer, Western Region</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-content">
+                        <p>"The community forum has been invaluable for learning sustainable farming practices. I've also been able to rent farm machinery that I could never afford to buy on my own."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta">
+        <div class="container">
+            <h2>Join the Agricultural Revolution</h2>
+            <p>Connect with essential services, access modern tools, and improve your farming operations with FarmAssist.</p>
+            <div class="cta-buttons">
+                <button class="btn btn-primary btn-cta" id="cta-register-btn">Get Started</button>
+                <a href="#" class="btn btn-outline btn-cta">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>FarmAssist</h3>
+                    <p>Connecting farmers with essential services to improve agricultural outcomes across Ghana.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">f</a>
+                        <a href="#" class="social-link">t</a>
+                        <a href="#" class="social-link">in</a>
+                        <a href="#" class="social-link">ig</a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#">Irrigation Management</a></li>
+                        <li><a href="#">Farm Machinery</a></li>
+                        <li><a href="#">Land Preparation</a></li>
+                        <li><a href="#">Livestock Care</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <p>Email: info@farmassist.com</p>
+                    <p>Phone: +233 20 123 4567</p>
+                    <p>Address: 15 Farming Lane, Accra, Ghana</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 FarmAssist. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    // Initialize slideshow variables
+    let slideIndex = 0;
+    let slideshowInterval;
+    let isPlaying = true;
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get DOM elements
+        const slides = document.querySelectorAll('.slide-bg');
+        const dots = document.querySelectorAll('.dot');
+        const pausePlayBtn = document.getElementById('pausePlayBtn');
+        const hero = document.querySelector('.hero');
+        
+        // Slideshow functions
+        function startSlideshow() {
+            slideshowInterval = setInterval(() => {
+                changeSlide(1);
+            }, 5000);
+        }
+        
+        function stopSlideshow() {
+            clearInterval(slideshowInterval);
+        }
+        
+        function toggleSlideshow() {
+            if (isPlaying) {
+                stopSlideshow();
+                pausePlayBtn.textContent = '▶️';
+            } else {
+                startSlideshow();
+                pausePlayBtn.textContent = '⏸️';
+            }
+            isPlaying = !isPlaying;
+        }
+        
+        function changeSlide(n) {
+            showSlide(slideIndex + n);
+        }
+        
+        function currentSlide(n) {
+            showSlide(n);
+        }
+        
+        function showSlide(n) {
+            slideIndex = n;
+            if (slideIndex >= slides.length) slideIndex = 0;
+            if (slideIndex < 0) slideIndex = slides.length - 1;
+            
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            slides[slideIndex].classList.add('active');
+            dots[slideIndex].classList.add('active');
+            
+            if (isPlaying) {
+                stopSlideshow();
+                startSlideshow();
+            }
+        }
+        
+        // Add navigation controls
+        const prevBtn = document.createElement('button');
+        prevBtn.innerHTML = '❮';
+        prevBtn.className = 'control-btn prev-btn';
+        prevBtn.onclick = () => changeSlide(-1);
+        
+        const nextBtn = document.createElement('button');
+        nextBtn.innerHTML = '❯';
+        nextBtn.className = 'control-btn next-btn';
+        nextBtn.onclick = () => changeSlide(1);
+        
+        hero.appendChild(prevBtn);
+        hero.appendChild(nextBtn);
+        
+        // Start slideshow
+        startSlideshow();
+        
+        // Make functions globally available
+        window.currentSlide = currentSlide;
+        window.toggleSlideshow = toggleSlideshow;
+    });
+
+    // Add this after your existing slideshow JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchForm = document.getElementById('search-form');
+        const searchInput = document.getElementById('search-input');
+        const searchResults = document.getElementById('search-results');
+        let searchTimeout;
+
+        // Debounce function to prevent too many API calls
+        function debounce(func, wait) {
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(searchTimeout);
+                    func(...args);
+                };
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(later, wait);
+            };
+        }
+
+        // Function to fetch search results
+        async function fetchSearchResults(query) {
+            try {
+                // Show loading state
+                searchResults.innerHTML = '<div class="loading">Searching...</div>';
+
+                // Get selected filters
+                const filters = {
+                    contentTypes: Array.from(document.querySelectorAll('input[name="content-type"]:checked'))
+                        .map(checkbox => checkbox.value),
+                    category: document.getElementById('filter-category').value
+                };
+
+                // Replace this URL with your actual API endpoint
+                const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(filters)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Search failed');
+                }
+
+                const data = await response.json();
+                displayResults(data);
+            } catch (error) {
+                searchResults.innerHTML = '<div class="no-results">An error occurred while searching. Please try again.</div>';
+                console.error('Search error:', error);
+            }
+        }
+
+        // Function to display results
+        function displayResults(data) {
+            if (!data || data.length === 0) {
+                searchResults.innerHTML = '<div class="no-results">No results found</div>';
+                return;
+            }
+
+            const resultsHTML = data.map(result => `
+                <div class="result-item">
+                    <h3 class="result-title">${result.title}</h3>
+                    <p class="result-description">${result.description}</p>
+                    <div class="result-meta">
+                        <span>${result.category}</span> • 
+                        <span>${result.date}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            searchResults.innerHTML = resultsHTML;
+        }
+
+        // Live search handler with debounce
+        const handleLiveSearch = debounce((event) => {
+            const query = event.target.value.trim();
+            if (query.length >= 2) { // Only search if 2 or more characters
+                fetchSearchResults(query);
+            } else {
+                searchResults.innerHTML = ''; // Clear results if query is too short
+            }
+        }, 300); // Wait 300ms after user stops typing
+
+        // Event listeners
+        searchInput.addEventListener('input', handleLiveSearch);
+
+        // Handle form submission
+        searchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const query = searchInput.value.trim();
+            if (query) {
+                fetchSearchResults(query);
+            }
+        });
+
+        // Handle filter changes
+        document.querySelectorAll('input[name="content-type"], #filter-category')
+            .forEach(filter => {
+                filter.addEventListener('change', () => {
+                    if (searchInput.value.trim()) {
+                        fetchSearchResults(searchInput.value.trim());
+                    }
+                });
+            });
+    });
+</script>
+</body>
+</html>

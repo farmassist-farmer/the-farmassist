@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm Assist - Login/Register</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: #2e7d32;
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .container {
+            width: 85%;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            color: #8bc34a;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #8bc34a;
+        }
+        
+        .auth-container {
+            padding-top: 100px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .auth-box {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+        }
+        
+        .auth-image {
+            flex: 1;
+            background-color: #4caf50;
+            padding: 2rem;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .auth-image h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .auth-image p {
+            margin-bottom: 2rem;
+        }
+        
+        .auth-forms {
+            flex: 1;
+            padding: 2rem;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            opacity: 0.7;
+            font-weight: 500;
+        }
+        
+        .tab-btn.active {
+            opacity: 1;
+            border-bottom: 2px solid #4caf50;
+        }
+        
+        .form-container {
+            display: none;
+        }
+        
+        .form-container.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .form-btn:hover {
+            background-color: #388e3c;
+        }
+        
+        footer {
+            background-color: #2e7d32;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        
+        /* Database Management Section */
+        .admin-section {
+            padding: 2rem;
+            margin-top: 2rem;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .admin-section.active {
+            display: block;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #2e7d32;
+        }
+        
+        .control-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .control-btn {
+            padding: 0.5rem 1rem;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .control-btn:hover {
+            background-color: #388e3c;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+        
+        .data-table th, .data-table td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .data-table th {
+            background-color: #f1f1f1;
+        }
+        
+        .record-form {
+            display: none;
+            background-color: #fff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+        
+        .record-form.active {
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .auth-box {
+                flex-direction: column;
+            }
+            
+            .auth-image {
+                padding: 1.5rem;
+            }
+            
+            .control-buttons {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">Farm<span>Assist</span></div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="auth-container">
+        <div class="container">
+            <div class="auth-box">
+                <div class="auth-image">
+                    <h2>Welcome to Farm Assist</h2>
+                    <p>Log in to access your farm management dashboard or register for a new account to utilize our agricultural services and tools.</p>
+                    <img src="WhatsApp Image 2025-04-23 at 10.14.38_3738e8c8.jpg" alt="Farm Management Illustration" style="max-width: 100%;">
+                </div>
+                <div class="auth-forms">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-target="login-form">Login</button>
+                        <button class="tab-btn" data-target="register-form">Register</button>
+                    </div>
+                    
+                    <div id="login-form" class="form-container active">
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label for="loginEmail">Email Address</label>
+                                <input type="email" id="loginEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="loginPassword">Password</label>
+                                <input type="password" id="loginPassword" required>
+                            </div>
+                            <button type="submit" class="form-btn">Login</button>
+                        </form>
+                    </div>
+                    
+                    <div id="register-form" class="form-container">
+                        <form id="registerForm">
+                            <div class="form-group">
+                                <label for="registerName">Full Name</label>
+                                <input type="text" id="registerName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="registerEmail">Email Address</label>
+                                <input type="email" id="registerEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="registerFarm">Farm Name</label>
+                                <input type="text" id="registerFarm">
+                            </div>
+                            <div class="form-group">
+                                <label for="registerAcreage">Farm Size (Acres)</label>
+                                <input type="number" id="registerAcreage">
+                            </div>
+                            <div class="form-group">
+                                <label for="registerPassword">Password</label>
+                                <input type="password" id="registerPassword" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="registerConfirmPassword">Confirm Password</label>
+                                <input type="password" id="registerConfirmPassword" required>
+                            </div>
+                            <button type="submit" class="form-btn">Register</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="admin-section" class="admin-section">
+                <h2 class="section-title">Farmer Database Management</h2>
+                
+                <div class="control-buttons">
+                    <button id="addBtn" class="control-btn">Add Farmer</button>
+                    <button id="retrieveBtn" class="control-btn">View All Farmers</button>
+                    <button id="updateBtn" class="control-btn">Update Farmer</button>
+                    <button id="deleteBtn" class="control-btn">Delete Farmer</button>
+                </div>
+                
+                <div id="addRecordForm" class="record-form">
+                    <h3>Add New Farmer Record</h3>
+                    <form id="addForm">
+                        <div class="form-group">
+                            <label for="clientId">Farmer ID</label>
+                            <input type="text" id="clientId" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="clientName">Farmer Name</label>
+                            <input type="text" id="clientName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="clientEmail">Email</label>
+                            <input type="email" id="clientEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="clientPhone">Phone</label>
+                            <input type="text" id="clientPhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="serviceType">Farm Type</label>
+                            <input type="text" id="serviceType" required placeholder="Crop, Livestock, Mixed, etc.">
+                        </div>
+                        <button type="submit" class="form-btn">Add Farmer</button>
+                    </form>
+                </div>
+                
+                <div id="updateRecordForm" class="record-form">
+                    <h3>Update Farmer Record</h3>
+                    <form id="updateForm">
+                        <div class="form-group">
+                            <label for="updateClientId">Farmer ID</label>
+                            <input type="text" id="updateClientId" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="updateClientName">Farmer Name</label>
+                            <input type="text" id="updateClientName">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateClientEmail">Email</label>
+                            <input type="email" id="updateClientEmail">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateClientPhone">Phone</label>
+                            <input type="text" id="updateClientPhone">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateServiceType">Farm Type</label>
+                            <input type="text" id="updateServiceType">
+                        </div>
+                        <button type="submit" class="form-btn">Update Farmer</button>
+                    </form>
+                </div>
+                
+                <div id="deleteRecordForm" class="record-form">
+                    <h3>Delete Farmer Record</h3>
+                    <form id="deleteForm">
+                        <div class="form-group">
+                            <label for="deleteClientId">Farmer ID</label>
+                            <input type="text" id="deleteClientId" required>
+                        </div>
+                        <button type="submit" class="form-btn">Delete Farmer</button>
+                    </form>
+                </div>
+                
+                <div id="recordsContainer">
+                    <table class="data-table" id="clientTable" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>Farmer ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Farm Type</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientTableBody">
+                            <!-- Data will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Farm Assist. All rights reserved. Supporting farmers with technology solutions.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Tab switching functionality
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons and forms
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.form-container').forEach(form => form.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding form
+                this.classList.add('active');
+                document.getElementById(this.dataset.target).classList.add('active');
+            });
+        });
+        
+        // Login functionality
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Simple validation for demo purposes
+            if (email === 'admin@farmassist.com' && password === 'admin123') {
+                document.getElementById('admin-section').classList.add('active');
+                alert('Login successful! Welcome to the Farm Assist admin panel.');
+                window.scrollTo(0, document.getElementById('admin-section').offsetTop - 100);
+            } else {
+                alert('Invalid credentials. Please try again.');
+            }
+        });
+        
+        // Registration functionality
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            
+            // Simple validation
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            alert(`Registration successful! Welcome to Farm Assist, ${name}!`);
+            // Switch to login tab
+            tabButtons[0].click();
+        });
+        
+        // Farmer database functionality (simulated)
+        // Sample data
+        let clientData = [
+            { id: 'FA001', name: 'Green Valley Farm', email: 'contact@greenvalley.com', phone: '555-123-4567', service: 'Crop Farming' },
+            { id: 'FA002', name: 'Sunrise Orchards', email: 'info@sunriseorchards.com', phone: '555-987-6543', service: 'Fruit Production' },
+            { id: 'FA003', name: 'Hillside Ranch', email: 'support@hillsideranch.com', phone: '555-567-8901', service: 'Livestock' }
+        ];
+        
+        // Database control buttons
+        document.getElementById('addBtn').addEventListener('click', function() {
+            hideAllForms();
+            document.getElementById('addRecordForm').classList.add('active');
+        });
+        
+        document.getElementById('retrieveBtn').addEventListener('click', function() {
+            hideAllForms();
+            displayClientRecords();
+        });
+        
+        document.getElementById('updateBtn').addEventListener('click', function() {
+            hideAllForms();
+            document.getElementById('updateRecordForm').classList.add('active');
+        });
+        
+        document.getElementById('deleteBtn').addEventListener('click', function() {
+            hideAllForms();
+            document.getElementById('deleteRecordForm').classList.add('active');
+        });
+        
+        // Hide all database forms
+        function hideAllForms() {
+            document.querySelectorAll('.record-form').forEach(form => form.classList.remove('active'));
+            document.getElementById('clientTable').style.display = 'none';
+        }
+        
+        // Display farmer records in table
+        function displayClientRecords() {
+            const tableBody = document.getElementById('clientTableBody');
+            tableBody.innerHTML = '';
+            
+            clientData.forEach(client => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${client.id}</td>
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.service}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            document.getElementById('clientTable').style.display = 'table';
+        }
+        
+        // Add record functionality
+        document.getElementById('addForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const newClient = {
+                id: document.getElementById('clientId').value,
+                name: document.getElementById('clientName').value,
+                email: document.getElementById('clientEmail').value,
+                phone: document.getElementById('clientPhone').value,
+                service: document.getElementById('serviceType').value
+            };
+            
+            // Check if ID already exists
+            if (clientData.some(client => client.id === newClient.id)) {
+                alert('A farmer with this ID already exists!');
+                return;
+            }
+            
+            clientData.push(newClient);
+            alert('Farmer record added successfully!');
+            this.reset();
+            displayClientRecords();
+        });
+        
+        // Update record functionality
+        document.getElementById('updateForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const clientId = document.getElementById('updateClientId').value;
+            const clientIndex = clientData.findIndex(client => client.id === clientId);
+            
+            if (clientIndex === -1) {
+                alert('No farmer found with this ID!');
+                return;
+            }
+            
+            // Update only provided fields
+            if (document.getElementById('updateClientName').value) {
+                clientData[clientIndex].name = document.getElementById('updateClientName').value;
+            }
+            
+            if (document.getElementById('updateClientEmail').value) {
+                clientData[clientIndex].email = document.getElementById('updateClientEmail').value;
+            }
+            
+            if (document.getElementById('updateClientPhone').value) {
+                clientData[clientIndex].phone = document.getElementById('updateClientPhone').value;
+            }
+            
+            if (document.getElementById('updateServiceType').value) {
+                clientData[clientIndex].service = document.getElementById('updateServiceType').value;
+            }
+            
+            alert('Farmer record updated successfully!');
+            this.reset();
+            displayClientRecords();
+        });
+        
+        // Delete record functionality
+        document.getElementById('deleteForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const clientId = document.getElementById('deleteClientId').value;
+            const initialLength = clientData.length;
+            
+            clientData = clientData.filter(client => client.id !== clientId);
+            
+            if (clientData.length === initialLength) {
+                alert('No farmer found with this ID!');
+                return;
+            }
+            
+            alert('Farmer record deleted successfully!');
+            this.reset();
+            displayClientRecords();
+        });
+		fetch('http://localhost/backend/api.php', {
+  method: 'POST', // or GET, depending on your backend
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ name: 'John' }) // if POST
+})
+.then(res => res.json())
+.then(data => {
+  console.log(data); // handle the backend response
+})
+.catch(err => console.error('Error:', err));
+
+    </script>
+</body>
+</html>

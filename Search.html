@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agricultural Website Search</title>
+    <style>
+        /* Basic styling for the search functionality */
+        .search-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 15px;
+            background-color: #f8faf8;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .search-form {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #cedad0;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .search-btn {
+            padding: 10px 20px;
+            background-color: #4c7d3f; /* Agricultural green */
+            color: rgb(14, 13, 13);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        .search-btn:hover {
+            background-color: #3a5f30;
+        }
+        
+        .search-filters {
+            margin-top: 15px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .search-results {
+            margin-top: 25px;
+        }
+        
+        .result-item {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-title {
+            color: #2b5520;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        
+        .result-description {
+            color: #495057;
+            margin-bottom: 5px;
+        }
+        
+        .result-meta {
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .highlight {
+            background-color: #ffff99;
+            padding: 0 2px;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 576px) {
+            .search-form {
+                flex-direction: column;
+            }
+            
+            .search-filters {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Search Component HTML -->
+    <div class="search-container">
+        <form id="search-form" class="search-form">
+            <input type="text" id="search-input" class="search-input" placeholder="Search for crops, articles, guides..." aria-label="Search">
+            <button type="submit" class="search-btn">Search</button>
+        </form>
+        
+        <div class="search-filters">
+            <div class="filter-group">
+                <input type="checkbox" id="filter-articles" name="content-type" value="articles" checked>
+                <label for="filter-articles">Articles</label>
+            </div>
+            <div class="filter-group">
+                <input type="checkbox" id="filter-guides" name="content-type" value="guides" checked>
+                <label for="filter-guides">Guides</label>
+            </div>
+            <div class="filter-group">
+                <input type="checkbox" id="filter-products" name="content-type" value="products" checked>
+                <label for="filter-products">Products</label>
+            </div>
+            <div class="filter-group">
+                <select id="filter-category" name="category">
+                    <option value="">All Categories</option>
+                    <option value="crops">Crops</option>
+                    <option value="livestock">Livestock</option>
+                    <option value="equipment">Equipment</option>
+                    <option value="techniques">Farming Techniques</option>
+                </select>
+            </div>
+        </div>
+        
+        <div id="search-results" class="search-results">
+            <!-- Results will be populated here dynamically -->
+        </div>
+    </div>
+
+    <!-- JavaScript for search functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Reference to the search form and results container
+            const searchForm = document.getElementById('search-form');
+            const searchInput = document.getElementById('search-input');
+            const resultsContainer = document.getElementById('search-results');
+            
+            // Sample data for demonstration purposes
+            // In a real implementation, this would be replaced with AJAX calls to a backend API
+            const siteContent = [
+                {
+                    id: 1,
+                    title: 'Sustainable Farming Practices',
+                    description: 'Learn about modern sustainable farming techniques to improve yield while protecting the environment.',
+                    content: 'Sustainable farming focuses on producing crops and livestock while minimizing environmental impact. These practices include crop rotation, water conservation, organic farming methods, and more.',
+                    type: 'articles',
+                    category: 'techniques',
+                    date: '2024-10-15'
+                },
+                {
+                    id: 2,
+                    title: 'Complete Guide to Growing Corn',
+                    description: 'Everything you need to know about planting, growing, and harvesting corn in various climates.',
+                    content: 'Corn is one of the most versatile crops that can be grown in different climates. This guide covers soil preparation, planting times, pest management, and harvesting techniques specific to corn.',
+                    type: 'guides',
+                    category: 'crops',
+                    date: '2024-09-22'
+                },
+                {
+                    id: 3,
+                    title: 'Modern Tractors and Implements',
+                    description: 'Review of the latest farming equipment and how they can improve agricultural productivity.',
+                    content: 'The latest generation of tractors incorporates GPS technology, automated systems, and fuel-efficient engines. This article reviews top models and their appropriate implements for various farming operations.',
+                    type: 'articles',
+                    category: 'equipment',
+                    date: '2024-10-05'
+                },
+                {
+                    id: 4,
+                    title: 'Organic Pest Control Methods',
+                    description: 'Natural ways to control pests without harmful chemicals.',
+                    content: 'Organic pest control involves using natural predators, companion planting, and organic compounds to manage pests. This approach is environmentally friendly and produces healthier food products.',
+                    type: 'guides',
+                    category: 'techniques',
+                    date: '2024-08-18'
+                },
+                {
+                    id: 5,
+                    title: 'Cattle Breeding Best Practices',
+                    description: 'Expert advice on cattle breeding for optimal health and productivity.',
+                    content: 'Successful cattle breeding requires understanding genetics, proper nutrition, and appropriate healthcare. This guide provides step-by-step advice for both small and large-scale operations.',
+                    type: 'guides',
+                    category: 'livestock',
+                    date: '2024-09-10'
+                },
+                {
+                    id: 6,
+                    title: 'Premium Seeds Collection',
+                    description: 'High-quality seed varieties for different regions and growing conditions.',
+                    content: 'Our premium seed collection includes drought-resistant varieties, high-yield strains, and organically certified options. Each product is tested for germination rate and purity.',
+                    type: 'products',
+                    category: 'crops',
+                    date: '2024-10-01'
+                }
+            ];
+            
+            // Function to perform search
+            function performSearch(query) {
+                // Get selected content types (checkboxes)
+                const selectedTypes = Array.from(document.querySelectorAll('input[name="content-type"]:checked'))
+                    .map(checkbox => checkbox.value);
+                
+                // Get selected category (dropdown)
+                const selectedCategory = document.getElementById('filter-category').value;
+                
+                // Filter content based on query and filters
+                const results = siteContent.filter(item => {
+                    // Check if content type matches selected filters
+                    if (!selectedTypes.includes(item.type)) {
+                        return false;
+                    }
+                    
+                    // Check if category matches selected filter (if any)
+                    if (selectedCategory && item.category !== selectedCategory) {
+                        return false;
+                    }
+                    
+                    // Check if query matches title, description or content
+                    const queryLower = query.toLowerCase();
+                    return item.title.toLowerCase().includes(queryLower) || 
+                           item.description.toLowerCase().includes(queryLower) || 
+                           item.content.toLowerCase().includes(queryLower);
+                });
+                
+                displayResults(results, query);
+            }
+            
+            // Function to display search results
+            function displayResults(results, query) {
+                // Clear previous results
+                resultsContainer.innerHTML = '';
+                
+                if (results.length === 0) {
+                    resultsContainer.innerHTML = '<div class="no-results">No results found. Try different keywords or filters.</div>';
+                    return;
+                }
+                
+                // Create and append result items
+                results.forEach(item => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'result-item';
+                    
+                    // Highlight matching text in title and description
+                    const highlightedTitle = highlightText(item.title, query);
+                    const highlightedDesc = highlightText(item.description, query);
+                    
+                    // Format the date
+                    const formattedDate = new Date(item.date).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                    
+                    // Set the result item content
+                    resultItem.innerHTML = `
+                        <h3 class="result-title">${highlightedTitle}</h3>
+                        <p class="result-description">${highlightedDesc}</p>
+                        <div class="result-meta">
+                            <span>${item.category.charAt(0).toUpperCase() + item.category.slice(1)}</span> | 
+                            <span>${item.type.charAt(0).toUpperCase() + item.type.slice(1)}</span> | 
+                            <span>${formattedDate}</span>
+                        </div>
+                    `;
+                    
+                    // Add click event to navigate to the content page
+                    resultItem.addEventListener('click', function() {
+                        // In a real implementation, this would navigate to the content page
+                        console.log(`Navigating to content ${item.id}: ${item.title}`);
+                        // Example: window.location.href = `/content/${item.id}`;
+                    });
+                    
+                    resultsContainer.appendChild(resultItem);
+                });
+            }
+            
+            // Function to highlight matching text
+            function highlightText(text, query) {
+                if (!query) return text;
+                
+                const queryLower = query.toLowerCase();
+                const textLower = text.toLowerCase();
+                
+                if (!textLower.includes(queryLower)) return text;
+                
+                const startIndex = textLower.indexOf(queryLower);
+                const endIndex = startIndex + query.length;
+                
+                return text.substring(0, startIndex) + 
+                       `<span class="highlight">${text.substring(startIndex, endIndex)}</span>` + 
+                       text.substring(endIndex);
+            }
+            
+            // Event listener for search form submission
+            searchForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const query = searchInput.value.trim();
+                
+                if (query) {
+                    performSearch(query);
+                } else {
+                    resultsContainer.innerHTML = '<div class="no-results">Please enter a search term.</div>';
+                }
+            });
+            
+            // Event listeners for filter changes to update results immediately
+            const filters = document.querySelectorAll('input[name="content-type"], #filter-category');
+            filters.forEach(filter => {
+                filter.addEventListener('change', function() {
+                    const query = searchInput.value.trim();
+                    if (query) {
+                        performSearch(query);
+                    }
+                });
+            });
+        });
+        
+        // The code below would be used in a real implementation to integrate with a server-side API
+        
+        /*
+        // Function to fetch search results from server API
+        async function fetchSearchResults(query, filters) {
+            try {
+                const response = await fetch('/api/search', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        query: query,
+                        filters: filters
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                return data.results;
+            } catch (error) {
+                console.error('Error fetching search results:', error);
+                return [];
+            }
+        }
+        */
+    </script>
+</body>
+</html>
